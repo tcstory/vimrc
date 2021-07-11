@@ -12,3 +12,8 @@ set expandtab
 " 你可以和我一样, 安装这个 sudo pacman -S xsel
 set clipboard+=unnamedplus
 
+set termguicolors
+
+call plug#begin(stdpath('data') . '/plugged')
+Plug 'itchyny/lightline.vim'
+call plug#end()
