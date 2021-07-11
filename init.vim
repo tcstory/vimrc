@@ -14,6 +14,14 @@ set clipboard+=unnamedplus
 
 set termguicolors
 
+exe 'source ' stdpath('config') . '/coc.vim'
+
+" todo: 让 signcolumn 能够根据文件类型来自动开启
+
 call plug#begin(stdpath('data') . '/plugged')
 Plug 'itchyny/lightline.vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
+
+
+
