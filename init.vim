@@ -5,23 +5,36 @@ syntax enable
 " nvim 默认开启 autoindent
 set smartindent
 set expandtab
-
+set termguicolors
+set updatetime=100
 
 " 剪切版的设置
 " 详细: https://snitxmhm.github.io/2020/04-30-Archlinux%E4%B8%8Bneovim%E4%B8%8E%E7%B3%BB%E7%BB%9F%E5%89%AA%E5%88%87%E6%9D%BF%E4%BA%92%E9%80%9A/
 " 你可以和我一样, 安装这个 sudo pacman -S xsel
 set clipboard+=unnamedplus
 
-set termguicolors
-
-exe 'source ' stdpath('config') . '/coc.vim'
-
-" todo: 让 signcolumn 能够根据文件类型来自动开启
 
 call plug#begin(stdpath('data') . '/plugged')
 Plug 'itchyny/lightline.vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'airblade/vim-gitgutter'
 call plug#end()
+
+
+let mapleader="\<space>"
+nnoremap <leader>n :tabn<cr>
+nnoremap <leader>p :tabp<cr>
+nnoremap <leader>j <C-w>j
+nnoremap <leader>k <C-w>k
+nnoremap <leader>h <C-w>h
+nnoremap <leader>l <C-w>l
+
+
+" gitgutter 颜色配置
+" https://jonasjacek.github.io/colors/
+highlight clear SignColumn
+highlight GitGutterAdd    guifg=#009900 ctermfg=2
+highlight GitGutterChange guifg=#bbbb00 ctermfg=3
+highlight GitGutterDelete guifg=#ff2222 ctermfg=1
 
 
 
