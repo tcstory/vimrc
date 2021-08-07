@@ -6,7 +6,7 @@ syntax enable
 set smartindent
 set expandtab
 set termguicolors
-set updatetime=100
+set updatetime=1000
 
 " 剪切版的设置
 " 详细: https://snitxmhm.github.io/2020/04-30-Archlinux%E4%B8%8Bneovim%E4%B8%8E%E7%B3%BB%E7%BB%9F%E5%89%AA%E5%88%87%E6%9D%BF%E4%BA%92%E9%80%9A/
@@ -17,6 +17,9 @@ set clipboard+=unnamedplus
 call plug#begin(stdpath('data') . '/plugged')
 Plug 'itchyny/lightline.vim'
 Plug 'airblade/vim-gitgutter'
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'kyazdani42/nvim-tree.lua'
+Plug 'pocco81/AutoSave.nvim'
 call plug#end()
 
 
@@ -29,6 +32,13 @@ nnoremap <leader>h <C-w>h
 nnoremap <leader>l <C-w>l
 
 
+" spaces & Tabs {{{
+set tabstop=2       " number of visual spaces per TAB
+set softtabstop=2   " number of spaces in tab when editing
+set shiftwidth=2   " number of spaces to use for autoindent
+set expandtab       " tabs are space
+" }}} Spaces & Tabs
+
 " gitgutter 颜色配置
 " https://jonasjacek.github.io/colors/
 highlight clear SignColumn
@@ -37,4 +47,21 @@ highlight GitGutterChange guifg=#bbbb00 ctermfg=3
 highlight GitGutterDelete guifg=#ff2222 ctermfg=1
 
 
+" nvim-tree
+nnoremap <leader>1 :NvimTreeToggle<CR>
 
+" AutoSave
+lua << EOF
+local autosave = require("autosave")
+
+autosave.setup(
+{
+  debounce_delay = 1000,
+  conditions = {
+    exists = true,
+    filetype_is_not = {},
+    modifiable = true,
+  },
+}
+)
+EOF
