@@ -19,7 +19,8 @@ Plug 'itchyny/lightline.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
-Plug 'pocco81/AutoSave.nvim'
+" Plug 'sindrets/diffview.nvim'
+Plug '~/code-for-fun/my-vim/AutoSave.nvim' 
 call plug#end()
 
 
@@ -59,6 +60,7 @@ autosave.setup(
   debounce_delay = 1000,
   conditions = {
     exists = true,
+    filetype_is = {"javascript", "typescript", "lua"},
     filetype_is_not = {},
     modifiable = true,
   },
