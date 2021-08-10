@@ -15,12 +15,16 @@ set clipboard+=unnamedplus
 
 
 call plug#begin(stdpath('data') . '/plugged')
-Plug 'itchyny/lightline.vim'
-Plug 'airblade/vim-gitgutter'
+Plug 'hoob3rt/lualine.nvim'
+" If you want to have icons in your statusline choose one of these
 Plug 'kyazdani42/nvim-web-devicons'
+Plug 'ryanoasis/vim-devicons'
+
+Plug 'airblade/vim-gitgutter'
 Plug 'kyazdani42/nvim-tree.lua'
 " Plug 'sindrets/diffview.nvim'
 Plug '~/code-for-fun/my-vim/AutoSave.nvim' 
+Plug 'projekt0n/github-nvim-theme'
 call plug#end()
 
 
@@ -67,3 +71,11 @@ autosave.setup(
 }
 )
 EOF
+
+" nani
+lua << EOF
+require('github-theme').setup()
+EOF
+
+lua require('lualine').setup({options={theme = "onelight"}})
+
