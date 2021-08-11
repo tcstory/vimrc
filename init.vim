@@ -64,7 +64,7 @@ autosave.setup(
   debounce_delay = 1000,
   conditions = {
     exists = true,
-    filetype_is = {"javascript", "typescript", "lua"},
+    filetype_is = {"javascript", "typescript", "lua", "markdown"},
     filetype_is_not = {},
     modifiable = true,
   },
@@ -80,4 +80,11 @@ lua << EOF
 require('github-theme').setup()
 EOF
 
+
+" markdown
+" https://github.com/tpope/vim-markdown
+" http://vimcasts.org/episodes/how-to-fold/
+let g:markdown_folding = 1
+let g:markdown_minlines = 100
+let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'vue', 'javascript', 'typescript']
 
