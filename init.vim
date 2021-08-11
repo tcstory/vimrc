@@ -72,10 +72,12 @@ autosave.setup(
 )
 EOF
 
-" nani
+" Set lualine configuration before github-theme
+lua require('lualine').setup({options={theme = "onelight"}})
+
+" github-nvim-theme
 lua << EOF
 require('github-theme').setup()
 EOF
 
-lua require('lualine').setup({options={theme = "onelight"}})
 
