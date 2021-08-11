@@ -25,6 +25,7 @@ Plug 'kyazdani42/nvim-tree.lua'
 " Plug 'sindrets/diffview.nvim'
 Plug '~/code-for-fun/my-vim/AutoSave.nvim' 
 Plug 'projekt0n/github-nvim-theme'
+Plug 'lilydjwg/fcitx.vim'
 call plug#end()
 
 
