@@ -21,11 +21,13 @@ Plug 'kyazdani42/nvim-web-devicons'
 Plug 'ryanoasis/vim-devicons'
 
 Plug 'airblade/vim-gitgutter'
-Plug 'kyazdani42/nvim-tree.lua'
+"Plug 'kyazdani42/nvim-tree.lua'
 " Plug 'sindrets/diffview.nvim'
 Plug '~/code-for-fun/my-vim/AutoSave.nvim' 
-Plug 'projekt0n/github-nvim-theme'
+Plug '~/code-for-fun/my-vim/nvim-tree.lua'
 Plug 'lilydjwg/fcitx.vim'
+" Build the extra binary if cargo exists on your system.
+Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
 call plug#end()
 
 
@@ -54,7 +56,7 @@ highlight GitGutterDelete guifg=#ff2222 ctermfg=1
 
 
 " nvim-tree
-nnoremap <leader>1 :NvimTreeToggle<CR>
+nnoremap <leader>1 :NvimTreeFocus<CR>
 
 " AutoSave
 lua << EOF
@@ -75,12 +77,6 @@ EOF
 
 " Set lualine configuration before github-theme
 lua require('lualine').setup({options={theme = "onelight"}})
-
-" github-nvim-theme
-lua << EOF
-require('github-theme').setup()
-EOF
-
 
 " markdown
 " https://github.com/tpope/vim-markdown
