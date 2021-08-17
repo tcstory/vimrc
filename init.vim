@@ -20,14 +20,18 @@ Plug 'hoob3rt/lualine.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'ryanoasis/vim-devicons'
 
-Plug 'airblade/vim-gitgutter'
 "Plug 'kyazdani42/nvim-tree.lua'
 " Plug 'sindrets/diffview.nvim'
 Plug '~/code-for-fun/my-vim/AutoSave.nvim' 
-Plug '~/code-for-fun/my-vim/nvim-tree.lua'
+Plug 'kyazdani42/nvim-tree.lua'
 Plug 'lilydjwg/fcitx.vim'
 " Build the extra binary if cargo exists on your system.
 Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
+Plug 'nvim-lua/plenary.nvim'
+Plug 'neovim/nvim-lspconfig'
+Plug 'kabouzeid/nvim-lspinstall'
+Plug 'hrsh7th/nvim-compe'
+Plug 'Th3Whit3Wolf/space-nvim'
 call plug#end()
 
 
@@ -40,19 +44,15 @@ nnoremap <leader>h <C-w>h
 nnoremap <leader>l <C-w>l
 
 
+" theme
+colorscheme space-nvim
+
 " spaces & Tabs {{{
 set tabstop=2       " number of visual spaces per TAB
 set softtabstop=2   " number of spaces in tab when editing
 set shiftwidth=2   " number of spaces to use for autoindent
 set expandtab       " tabs are space
 " }}} Spaces & Tabs
-
-" gitgutter 颜色配置
-" https://jonasjacek.github.io/colors/
-highlight clear SignColumn
-highlight GitGutterAdd    guifg=#009900 ctermfg=2
-highlight GitGutterChange guifg=#bbbb00 ctermfg=3
-highlight GitGutterDelete guifg=#ff2222 ctermfg=1
 
 
 " nvim-tree
@@ -70,7 +70,7 @@ autosave.setup(
     filetype_is = {"javascript", "typescript", "lua", "markdown"},
     filetype_is_not = {},
     modifiable = true,
-  },
+    },
 }
 )
 EOF
@@ -85,3 +85,51 @@ let g:markdown_folding = 1
 let g:markdown_minlines = 100
 let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'vue', 'javascript', 'typescript']
 
+" lsp
+
+lua << EOF
+vim.o.completeopt = "menuone,noselect"
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+-- Make runtime files discoverable to the server
+local runtime_path = vim.split(package.path, ';')
+table.insert(runtime_path, 'lua/?.lua')
+table.insert(runtime_path, 'lua/?/init.lua')
+
+local on_attach = function()
+  require('compe').setup({
+    min_length= 2,
+    source = {path = true, buffer = true, nvim_lsp = true, nvim_lua = true, spell = true}
+  }, 0)
+end
+
+
+require('lspinstall').setup() -- important
+require('lspconfig').lua.setup({
+  on_attach = on_attach,
+  capabilities = capabilities,
+  settings = {
+    Lua = {
+      runtime = {
+        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+        version = 'LuaJIT',
+        -- Setup your lua path
+        path = runtime_path,
+      },
+      diagnostics = {
+        -- Get the language server to recognize the `vim` global
+        globals = { 'vim' },
+      },
+      workspace = {
+        -- Make the server aware of Neovim runtime files
+        library = vim.api.nvim_get_runtime_file('', true),
+      },
+      -- Do not send telemetry data containing a randomized but unique identifier
+      telemetry = {
+        enable = false,
+      },
+    },
+  },
+})
+EOF
