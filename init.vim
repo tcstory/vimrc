@@ -162,11 +162,29 @@ require('lspconfig').lua.setup({
 })
 
 
-vim.api.nvim_set_keymap('i', '<C-Space>', 'compe#complete()', {expr=true, silent=true, noremap=true})
+-- vim.api.nvim_set_keymap('i', '<C-Space>', 'compe#complete()', {expr=true, silent=true, noremap=true})
 vim.api.nvim_set_keymap('i', '<CR>', 'compe#confirm("<CR>")', {expr=true, silent=true, noremap=true})
 vim.api.nvim_set_keymap('i', '<C-e>', 'compe#close("<C-e>")', {expr=true, silent=true, noremap=true})
 -- inoremap <silent><expr> <C-Space> compe#complete()
 -- inoremap <silent><expr> <CR>      compe#confirm('<CR>')
 -- inoremap <silent><expr> <C-e>     compe#close('<C-e>')
 
+
+local t = function(str)
+  return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
+_G.tab_complete = function()
+  if vim.fn.pumvisible() == 1 then
+    return t "<C-n>"
+  else
+    return vim.fn['compe#complete']()
+  end
+end
+_G.s_tab_complete = function()
+  if vim.fn.pumvisible() == 1 then
+    return t "<C-p>"
+  end
+end
+vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr=true, silent=true, noremap=true})
+vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr=true, silent=true, noremap=true})
 EOF
