@@ -1,0 +1,191 @@
+" 可以执行 :help vim-difference 来查看 nvim 的默认值
+set number
+set list listchars=extends:❯,precedes:❮,tab:▸\ ,trail:˽
+syntax enable
+" nvim 默认开启 autoindent
+set smartindent
+set expandtab
+set termguicolors
+set updatetime=1000
+
+" 剪切版的设置
+" 详细: https://snitxmhm.github.io/2020/04-30-Archlinux%E4%B8%8Bneovim%E4%B8%8E%E7%B3%BB%E7%BB%9F%E5%89%AA%E5%88%87%E6%9D%BF%E4%BA%92%E9%80%9A/
+" 你可以和我一样, 安装这个 sudo pacman -S xsel
+set clipboard+=unnamedplus
+
+
+call plug#begin(stdpath('data') . '/plugged')
+Plug 'hoob3rt/lualine.nvim'
+" If you want to have icons in your statusline choose one of these
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'ryanoasis/vim-devicons'
+
+"Plug 'kyazdani42/nvim-tree.lua'
+" Plug 'sindrets/diffview.nvim'
+Plug '~/code-for-fun/my-vim/AutoSave.nvim' 
+Plug 'kyazdani42/nvim-tree.lua'
+Plug 'lilydjwg/fcitx.vim'
+" Build the extra binary if cargo exists on your system.
+Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
+Plug 'nvim-lua/plenary.nvim'
+Plug 'neovim/nvim-lspconfig'
+Plug 'kabouzeid/nvim-lspinstall'
+Plug 'hrsh7th/nvim-compe'
+Plug 'Th3Whit3Wolf/space-nvim'
+Plug 'sindrets/diffview.nvim'
+call plug#end()
+
+
+let mapleader="\<space>"
+nnoremap <leader>n :tabn<cr>
+nnoremap <leader>p :tabp<cr>
+nnoremap <leader>j <C-w>j
+nnoremap <leader>k <C-w>k
+nnoremap <leader>h <C-w>h
+nnoremap <leader>l <C-w>l
+
+
+" theme
+colorscheme space-nvim
+
+" spaces & Tabs {{{
+set tabstop=2       " number of visual spaces per TAB
+set softtabstop=2   " number of spaces in tab when editing
+set shiftwidth=2   " number of spaces to use for autoindent
+set expandtab       " tabs are space
+" }}} Spaces & Tabs
+
+
+" nvim-tree
+nnoremap <leader>1 :NvimTreeFocus<CR>
+
+" AutoSave
+lua << EOF
+local autosave = require("autosave")
+
+autosave.setup(
+{
+  debounce_delay = 1000,
+  conditions = {
+    exists = true,
+    filetype_is = {"javascript", "typescript", "lua", "markdown"},
+    filetype_is_not = {},
+    modifiable = true,
+    },
+}
+)
+EOF
+
+" Set lualine configuration before github-theme
+lua require('lualine').setup({options={theme = "onelight"}})
+
+" markdown
+" https://github.com/tpope/vim-markdown
+" http://vimcasts.org/episodes/how-to-fold/
+let g:markdown_folding = 1
+let g:markdown_minlines = 100
+let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'vue', 'javascript', 'typescript']
+
+" lsp
+
+lua << EOF
+vim.o.completeopt = "menuone,noselect"
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+-- Make runtime files discoverable to the server
+local runtime_path = vim.split(package.path, ';')
+table.insert(runtime_path, 'lua/?.lua')
+table.insert(runtime_path, 'lua/?/init.lua')
+
+local on_attach = function(client, bufnr)
+  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+  -- Mappings.
+  local opts = { noremap=true, silent=true }
+
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  -- buf_set_keymap('n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  -- buf_set_keymap('n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  -- buf_set_keymap('n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+  buf_set_keymap('n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  buf_set_keymap('n', '<leader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  buf_set_keymap('n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+end
+
+
+require('compe').setup({
+  min_length= 2,
+  source = {path = true, buffer = true, nvim_lsp = true, nvim_lua = true, spell = true}
+}, 0);
+require('lspinstall').setup() -- important
+require('lspconfig').lua.setup({
+  on_attach = on_attach,
+  capabilities = capabilities,
+  settings = {
+    Lua = {
+      runtime = {
+        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+        version = 'LuaJIT',
+        -- Setup your lua path
+        path = runtime_path,
+      },
+      diagnostics = {
+        -- Get the language server to recognize the `vim` global
+        globals = { 'vim' },
+      },
+      workspace = {
+        -- Make the server aware of Neovim runtime files
+        library = {
+          [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+          [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+          [vim.fn.stdpath('data') .. '/plugged/plenary.nvim'] = true
+        },
+      },
+      -- Do not send telemetry data containing a randomized but unique identifier
+      telemetry = {
+        enable = false,
+      },
+    },
+  },
+})
+
+
+-- vim.api.nvim_set_keymap('i', '<C-Space>', 'compe#complete()', {expr=true, silent=true, noremap=true})
+vim.api.nvim_set_keymap('i', '<CR>', 'compe#confirm("<CR>")', {expr=true, silent=true, noremap=true})
+vim.api.nvim_set_keymap('i', '<C-e>', 'compe#close("<C-e>")', {expr=true, silent=true, noremap=true})
+-- inoremap <silent><expr> <C-Space> compe#complete()
+-- inoremap <silent><expr> <CR>      compe#confirm('<CR>')
+-- inoremap <silent><expr> <C-e>     compe#close('<C-e>')
+
+
+local t = function(str)
+  return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
+_G.tab_complete = function()
+  if vim.fn.pumvisible() == 1 then
+    return t "<C-n>"
+  else
+    return vim.fn['compe#complete']()
+  end
+end
+_G.s_tab_complete = function()
+  if vim.fn.pumvisible() == 1 then
+    return t "<C-p>"
+  end
+end
+vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr=true, silent=true, noremap=true})
+vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr=true, silent=true, noremap=true})
+EOF
