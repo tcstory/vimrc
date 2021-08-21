@@ -40,7 +40,17 @@ require('compe').setup({
   source = {path = true, buffer = true, nvim_lsp = true, nvim_lua = true, spell = true}
 }, 0);
 require('lspinstall').setup() -- important
-require('lspconfig').lua.setup({
+local lspconfig = require('lspconfig')
+lspconfig.tsserver.setup({
+  on_attach = on_attach,
+  cmd = { "/home/tcstory/.local/share/nvim/lspinstall/typescript/./node_modules/.bin/typescript-language-server", "--stdio" },
+  filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
+  init_options = {
+    hostInfo = "neovim"
+  },
+  root_dir = lspconfig.util.root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git")
+})
+lspconfig.lua.setup({
   on_attach = on_attach,
   capabilities = capabilities,
   settings = {

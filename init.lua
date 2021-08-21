@@ -16,12 +16,12 @@ vim.opt.expandtab = true
 
 -- map leader to space is not using <Space>
 vim.api.nvim_set_var('mapleader', ' ')
-vim.api.nvim_set_keymap('n', '<leader>n', ':tabn<cr>', {noremap = true})
-vim.api.nvim_set_keymap('n', '<leader>p', ':tabp<cr>', {noremap = true})
-vim.api.nvim_set_keymap('n', '<leader>j', '<C-w>j', {noremap = true})
-vim.api.nvim_set_keymap('n', '<leader>k', '<C-w>k', {noremap = true})
-vim.api.nvim_set_keymap('n', '<leader>h', '<C-w>h', {noremap = true})
-vim.api.nvim_set_keymap('n', '<leader>l', '<C-w>l', {noremap = true})
+--vim.api.nvim_set_keymap('n', '<leader>n', ':tabn<cr>', {noremap = true})
+--vim.api.nvim_set_keymap('n', '<leader>p', ':tabp<cr>', {noremap = true})
+-- vim.api.nvim_set_keymap('n', '<leader>j', '<C-w>j', {noremap = true})
+-- vim.api.nvim_set_keymap('n', '<leader>k', '<C-w>k', {noremap = true})
+-- vim.api.nvim_set_keymap('n', '<leader>h', '<C-w>h', {noremap = true})
+-- vim.api.nvim_set_keymap('n', '<leader>l', '<C-w>l', {noremap = true})
 
 
 vim.fn['plug#begin'](vim.fn.stdpath('data') .. '/plugged')
@@ -37,6 +37,7 @@ vim.fn['plug#']('neovim/nvim-lspconfig')
 vim.fn['plug#']('kabouzeid/nvim-lspinstall')
 vim.fn['plug#']('hrsh7th/nvim-compe')
 vim.fn['plug#']('sindrets/diffview.nvim')
+vim.fn['plug#']('lewis6991/gitsigns.nvim')
 vim.fn['plug#end']()
 
 -- lualine
@@ -66,6 +67,10 @@ autosave.setup(
 vim.g.markdown_folding = 1
 vim.g.markdown_minlines = 100
 vim.g.markdown_fenced_languages = {'html', 'python', 'bash=sh', 'vue', 'javascript', 'typescript'}
+
+
+-- lewis6991/gitsigns.nvim
+require('gitsigns').setup()
 
 
 -- lsp
