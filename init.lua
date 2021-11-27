@@ -23,6 +23,7 @@ vim.fn['plug#begin'](vim.fn.stdpath('data') .. '/plugged')
 vim.fn['plug#']('hoob3rt/lualine.nvim')
 vim.fn['plug#']('kyazdani42/nvim-web-devicons')
 vim.fn['plug#']('lilydjwg/fcitx.vim')
+vim.fn['plug#']('windwp/nvim-autopairs')
 vim.fn['plug#end']()
 
 -- lualine
@@ -35,3 +36,4 @@ vim.g.markdown_folding = 1
 vim.g.markdown_minlines = 100
 vim.g.markdown_fenced_languages = {'html', 'python', 'bash=sh', 'vue', 'javascript', 'typescript'}
 
+require('nvim-autopairs').setup{}
