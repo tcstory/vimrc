@@ -37,3 +37,11 @@ vim.g.markdown_minlines = 100
 vim.g.markdown_fenced_languages = {'html', 'python', 'bash=sh', 'vue', 'javascript', 'typescript'}
 
 require('nvim-autopairs').setup{}
+
+
+-- netrw
+vim.g.netrw_banner = 0
+vim.g.netrw_liststyle = 3
+vim.g.netrw_altv = 1
+vim.g.netrw_winsize = 85
+vim.g.netrw_browse_split = 2
